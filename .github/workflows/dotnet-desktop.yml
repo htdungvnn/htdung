@@ -55,6 +55,15 @@ jobs:
         env:
           DOTNET_ENVIRONMENT: Development
 
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/authapi:latest .
+      
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/authapi:latest
+
       - name: Run Tests (if any)
         run: dotnet test --no-build --verbosity normal
         continue-on-error: true
