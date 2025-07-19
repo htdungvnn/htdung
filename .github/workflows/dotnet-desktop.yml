@@ -1,0 +1,64 @@
+name: Build and Test AuthApi
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: htdung_auth_db_user
+          POSTGRES_PASSWORD: htdung_auth_db_password
+          POSTGRES_DB: htdung_auth_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DOTNET_VERSION: '8.0.x'
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Default: Host=localhost;Database=htdung_auth_db;Username=htdung_auth_db_user;Password=htdung_auth_db_password
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Run EF Core migrations
+        run: dotnet ef database update
+        env:
+          DOTNET_ENVIRONMENT: Development
+
+      - name: Run Tests (if any)
+        run: dotnet test --no-build --verbosity normal
+        continue-on-error: true
+
+      # Optional: build Docker image (if you want to publish it)
+      # - name: Build Docker image
+      #   run: docker build -t htdung/authapi .
+
+      # Optional: push Docker image (you need to setup Docker Hub credentials)
+      # - name: Push Docker image
+      #   run: |
+      #     echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      #     docker push htdung/authapi
