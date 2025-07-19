@@ -1,0 +1,30 @@
+﻿version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: htdung_auth_db_user
+      POSTGRES_PASSWORD: htdung_auth_db_password
+      POSTGRES_DB: htdung_auth_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  authapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5001:80"
+    depends_on:
+      - postgres
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    volumes:
+      - .:/app
+
+volumes:
+  pgdata:

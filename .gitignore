@@ -1,0 +1,21 @@
+# Build output
+bin/
+obj/
+
+# NuGet packages
+/packages/
+
+# Rider project files
+riderModule.iml
+/.idea/
+/_ReSharper.Caches/
+
+# EF Core Migrations
+/Migrations/
+
+# Ignore all .xml files
+*.xml
+
+# Configuration files
+appsettings.json
+appsettings.*.json

@@ -1,0 +1,37 @@
+# Build output
+bin/
+obj/
+
+# NuGet packages
+/packages/
+
+# EF Core Migrations
+/Migrations/
+
+# Ignore all .xml files (e.g. configs, metadata)
+*.xml
+
+# Application configuration (contains secrets)
+appsettings.json
+appsettings.*.json
+
+# Rider IDE files
+.idea/
+*.iml
+/.idea.htdung.iml
+/projectSettingsUpdater.xml
+/modules.xml
+/contentModel.xml
+/.idea/
+_ReSharper.Caches/
+
+# Rider default ignored files
+/shelf/
+/workspace.xml
+
+# HTTP client requests from IDE
+/httpRequests/
+
+# Datasource storage
+/dataSources/
+/dataSources.local.xml
