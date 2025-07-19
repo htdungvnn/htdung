@@ -51,7 +51,7 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Run EF Core migrations
-        run: dotnet ef database update
+        run: dotnet ef database update --project ./AuthApi
         env:
           DOTNET_ENVIRONMENT: Development
 
